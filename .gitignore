@@ -1,0 +1,15 @@
+# Simulink build / cache
+slprj/
+*.slxc
+*.autosave
+*.slx.r*
+
+# MATLAB editor backups
+*.asv
+*.m~
+
+# OS
+.DS_Store
+
+# Editor / agent
+.claude/
