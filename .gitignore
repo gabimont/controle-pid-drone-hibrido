@@ -13,3 +13,6 @@ slprj/
 
 # Editor / agent
 .claude/
+
+# Trabalho de terceiros (nao versionar aqui)
+nao_linear/mirko_*.slx
