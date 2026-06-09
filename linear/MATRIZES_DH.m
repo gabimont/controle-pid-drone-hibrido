@@ -1,16 +1,13 @@
-% MATRIZES_DH.m  (variante: ana)
+% MATRIZES_DH.m
 % =================================================================
-% Gerado automaticamente por DH_build_model.m em 07-May-2026 23:06:28
+% Gerado automaticamente por DH_build_model.m em 09-Jun-2026 17:11:38
 % NAO EDITAR a mao - re-rode DH_build_model.m para regenerar.
 % =================================================================
 
 %% Condicoes de trim utilizadas
-coef_choice = 'ana';
 Ve        = 12;
 he        = 600;
 gammae    = 0;
-coef_Sato = 0;
-coef_Ana  = 1;
 surfaces  = 24;
 R         = 6.371e+06;
 
@@ -18,7 +15,7 @@ R         = 6.371e+06;
 Xe = [11.6211215112 0 2.99157731333 0 0 0 0 0.251955413458 0 0 0 -600 0 0]';
 Ue = [0.283590235022 0.133002178957 0 0 0 0 0]';
 
-Xe_long = [11.6211215112 0.251955413458 0 0.251955413458 600];
+Xe_long = [11.6211215112 0.251955413458 0 0.251955413458 600 12];
 Xe_lat  = [0 0 0 0 0];
 
 %% Modelo linear completo (14 estados x 7 inputs x 18 outputs)
@@ -30,14 +27,14 @@ C = [0.968409143796 0 0.249293568672 0 0 0 0 0 0 0 0 0 0 0;-0.0207860161316 0 0.
 
 D = [0 0 0 0 0 0 0;0 0 0 0 0 0 0;0 0 0 0 0 -0.0833333333333 0;0 0 0 0 0 0 -0.0833333333333;0 0 0 0 0 0 0;0 0 0 0 0 0 0;0 0 0 0 0 0 0;0 0 0 0 0 0 0;0 0 0 0 0 0 0;0 0 0 0 0 0 0;6.0709377736 0 0 0 0 0 0;0 0 0 0.475471581955 0 0.478256138758 0;0 0 0 0 0 0 0;0 0 0 0 0 0 0;0 0 0 0 0 0 0;0 0 0 0 0 0 0;0 0 0 0 0 0 0;0 203.459244613 0 0 0 0 0];
 
-%% Modo longitudinal desacoplado: [u alpha q theta h] x [throttle elevator]
+%% Modo longitudinal desacoplado: x=[u alpha q theta h], u=[throttle elevator], y=[u alpha q theta h VT]
 A_long = [0.124449367471 13.2927492875 -1.17339549516 -9.49695980521 -0.000204426217424;-0.134488507429 -2.98931187313 0.668764894751 0 7.88398738718e-05;1.28625283202e-07 -38.7481393403 -4.10774517059 0 -6.66853689124e-11;0 0 1 0 0;5.55111512313e-16 -12 0 11.9999206482 0];
 
 B_long = [6.0709377736 0;-0.126122775793 0;0 45.9817892826;0 0;0 0];
 
-C_long = [1 0 0 0 0;0 1 0 0 0;0 0 1 0 0;0 0 0 1 0;0 0 0 0 1];
+C_long = [1 0 0 0 0;0 1 0 0 0;0 0 1 0 0;0 0 0 1 0;0 0 0 0 1;1.03260257527 3.08911043787 0 0 0];
 
-D_long = [0 0;0 0;0 0;0 0;0 0];
+D_long = [0 0;0 0;0 0;0 0;0 0;0 0];
 
 %% Modo latero-direcional: [beta p r phi psi] x [aileron rudder]
 A_lat = [-0.478256138758 0.219814827479 -0.966869738147 0.791418550472 0;-51.6721771696 -12.4294087587 9.36203169385 0 0;15.744328446 -0.648338640522 -2.35453880929 0 0;0 1 0.257425869822 0 0;0 0 1.03260257527 0 0];
@@ -57,7 +54,7 @@ sys_DH = ss(A, B, C, D, ...
 sys_long = ss(A_long, B_long, C_long, D_long, ...
     'StateName',{'u';'alpha';'q';'theta';'h'}, ...
     'InputName',{'throttle';'elevator'}, ...
-    'OutputName',{'u';'alpha';'q';'theta';'h'});
+    'OutputName',{'u';'alpha';'q';'theta';'h';'VT'});
 
 sys_lat = ss(A_lat, B_lat, C_lat, D_lat, ...
     'StateName',{'beta';'p';'r';'phi';'psi'}, ...

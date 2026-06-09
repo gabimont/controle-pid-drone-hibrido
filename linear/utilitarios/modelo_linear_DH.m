@@ -43,13 +43,18 @@ T_long = [ ...
 A_long = T_long * A_long_native / T_long;
 B_long = T_long * B_long_native;
 
-C_long = eye(5);
-D_long = zeros(5,2);
+% Saidas: 5 estados + VT linearizado em torno do trim:
+%   dVT = cos(alpha_e)*du + sin(alpha_e)*dw
+%       = (VT_e/u_e)*du + (VT_e*w_e/u_e)*dalpha
+% VT (nao u) e' a realimentacao correta da malha de velocidade.
+VT_e   = sqrt(u0^2 + w0^2);
+C_long = [eye(5); VT_e/u0, VT_e*w0/u0, 0, 0, 0];
+D_long = zeros(6,2);
 
 sys_long = ss(A_long, B_long, C_long, D_long, ...
     'StateName', {'u'; 'alpha'; 'q'; 'theta'; 'h'}, ...
     'InputName', {'throttle'; 'elevator'}, ...
-    'OutputName', {'u'; 'alpha'; 'q'; 'theta'; 'h'})
+    'OutputName', {'u'; 'alpha'; 'q'; 'theta'; 'h'; 'VT'})
 
 %% ---------- MODO LATERO-DIRECCIONAL ----------
 idx_lat = [2 4 6 7 9];   % [v p r phi psi]

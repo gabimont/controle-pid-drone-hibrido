@@ -1,12 +1,12 @@
 % Autor: SATO, F. C. Y. CURSINO
 % ITA - PG/EEC-D
-% MODELO MATEMÁTICO COMPLETO DH
+% MODELO MATEMï¿½TICO COMPLETO DH
 % PROGRAMA ADAPTADO DE NOTAS DE AULA AB-266 - PROF. ALMEIDA, F. A.
 % MODIFICADO EM: 21/03/2026 
 
-function Y = obs_rigidbody_DH(t,X,U,coef_Sato,coef_Ana)
+function Y = obs_rigidbody_DH(t,X,U)
 
-%DECLARAÇÃO DE VARIAVEIS: ESTADOS, CONTROLES E PERTURBAÇÕES
+%DECLARAï¿½ï¿½O DE VARIAVEIS: ESTADOS, CONTROLES E PERTURBAï¿½ï¿½ES
 
 u     = X(1);
 v     = X(2);
@@ -31,7 +31,7 @@ Lbn = [cos(theta)*cos(psi)                            cos(theta)*sin(psi)       
 
 Lnb = Lbn';
 
-%PERTURBAÇÕES DO VENTO
+%PERTURBAï¿½ï¿½ES DO VENTO
 
 wD = U(7);
 U(5:7) = Lbn*U(5:7);
@@ -39,15 +39,15 @@ wx = U(5);
 wy = U(6);
 wz = U(7);
 
-%PARÂMETROS DA AERONAVE
+%PARï¿½METROS DA AERONAVE
 %%
-VT0 = 12; %VELOCIDADE DE REFERÊNCIA [m/s]UTILIZADA NAS SIMULAÇÕES EM AVL PARA OBTENÇÃO DAS DERIVADAS DE ESTABILIDADE (VETOR THETA)
-S   = 0.27; %ÁREA DA ASA [m^2]
-m   = 2.2;%MASSA TOTAL DA AERONAVE (CONSIDERAR A CARGA ÚTIL) [kg]
-c   = 0.226 ; %CORDA MÉDIA AERODINÂMICA [m]
+VT0 = 12; %VELOCIDADE DE REFERï¿½NCIA [m/s]UTILIZADA NAS SIMULAï¿½ï¿½ES EM AVL PARA OBTENï¿½ï¿½O DAS DERIVADAS DE ESTABILIDADE (VETOR THETA)
+S   = 0.27; %ï¿½REA DA ASA [m^2]
+m   = 2.2;%MASSA TOTAL DA AERONAVE (CONSIDERAR A CARGA ï¿½TIL) [kg]
+c   = 0.226 ; %CORDA Mï¿½DIA AERODINï¿½MICA [m]
 b   = 1.2; %ENVERGADURA DA ASA [m] 
-g   = 9.80665;%ACELERAÇÃO DA GRAVIDADE [m/s^2]
-pi = 3.14159265;%NÚMERO Pi
+g   = 9.80665;%ACELERAï¿½ï¿½O DA GRAVIDADE [m/s^2]
+pi = 3.14159265;%Nï¿½MERO Pi
 e =0.8;
 AR = (b^2)/S;%ALONGAMENTO DA ASA
 
@@ -60,14 +60,14 @@ AR = (b^2)/S;%ALONGAMENTO DA ASA
     
   Iy = 0.11550;
 
-% COMANDOS PARA SUPERFÍCIES DE CONTROLE DA AERONAVE
+% COMANDOS PARA SUPERFï¿½CIES DE CONTROLE DA AERONAVE
 
 dt    = U(1);%manete trotle
 de    = U(2);%elevator
 da    = U(3);%aileron
 dr    = U(4);%leme
 
-% DADOS ATMOSFÉRICOS, VELOCIDADE REAL E ÂNGULOS DE INCIDÊNCIA
+% DADOS ATMOSFï¿½RICOS, VELOCIDADE REAL E ï¿½NGULOS DE INCIDï¿½NCIA
 
 VT    = sqrt((u-wx)^2 + (v-wy)^2 + (w-wz)^2 ); %Aerodynamic velocity
 alpha = atan((w-wz)/(u-wx));
@@ -77,31 +77,31 @@ T    = 288.15*(1-6.5e-3*(-xD)/288.15);
 rho  = 1013.25e2*(1-6.5e-3*(-xD)/288.15)^(5.2561)/(287.3*T);
 
 
-%%DEFINIÇÃO DO VETOR DE DERIVADAS DE ESTABILIDADE OBTIDO NO AVL(THETA - CONFORME
-%%PROGRAMA DE IDENTIFICAÇAO OEM)
+%%DEFINIï¿½ï¿½O DO VETOR DE DERIVADAS DE ESTABILIDADE OBTIDO NO AVL(THETA - CONFORME
+%%PROGRAMA DE IDENTIFICAï¿½AO OEM)
 
-coef_DH;%UTILIZAR O ARQUIVO COEF QUE REPRESENTA O MODELO AERODINÂMICO COMPLETO DA AERONAVE DH
+coef_DH;%UTILIZAR O ARQUIVO COEF QUE REPRESENTA O MODELO AERODINï¿½MICO COMPLETO DA AERONAVE DH
 
 %%
 
-qbar = 0.5*rho*VT^2;% PRESSÃO DINÂMICA
+qbar = 0.5*rho*VT^2;% PRESSï¿½O DINï¿½MICA
 
 Cm   = Cm0 + Cmalpha*alpha + Cmde*de + Cmq*q*c/(2*VT0);% COEFICIENTE DE MOMENTO DE ARFAGEM
-qp = qbar*S*Cm/Iy;%ACELERAÇÃO ANGULAR DE ARFAGEM [rad/s]
+qp = qbar*S*Cm/Iy;%ACELERAï¿½ï¿½O ANGULAR DE ARFAGEM [rad/s]
 
 
-%Gamma - RELAÇÃO ENTRE O ÂNGULO DE ATAQUE E O ÂNGULO DE ARFAGEM
+%Gamma - RELAï¿½ï¿½O ENTRE O ï¿½NGULO DE ATAQUE E O ï¿½NGULO DE ARFAGEM
 
 xNpxEpxDp = Lnb*[u v w]';
 xDp       = xNpxEpxDp(3);
 gamma     = asin((-xDp-wD)/VT);
 
-% CÁLCULO DE FORÇAS E MOMENTOS
+% Cï¿½LCULO DE FORï¿½AS E MOMENTOS
 
-[Ti,Fext,Mext,m,axayaz] = modelo_DH(qbar,VT,alpha,beta,X,U,rho,coef_Sato,coef_Ana); 
+[Ti,Fext,Mext,m,axayaz] = modelo_DH(qbar,VT,alpha,beta,X,U,rho);
 
 
-% SAÍDAS OBSERVADAS
+% SAï¿½DAS OBSERVADAS
 
 Y =  [VT
       alpha

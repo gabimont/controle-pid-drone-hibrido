@@ -1,12 +1,12 @@
 % Autor: SATO, F. C. Y. CURSINO
 % ITA - PG/EEC-D
-% MODELO MATEMÁTICO COMPLETO NÃO-LINEAR DH (DRONE HÍBRIDO)
+% MODELO MATEMï¿½TICO COMPLETO Nï¿½O-LINEAR DH (DRONE Hï¿½BRIDO)
 % PROGRAMA ADAPTADO DE NOTAS DE AULA AB-266 - PROF. ALMEIDA, F. A.
 % MODIFICADO EM: 21/03/2026
 
 % Modiicado por: Huascar Mirko Montecinos Cortez em 23/04/2026
 
-function [Ti,Fext,Mext,m,axayaz] = modelo_DH(qbar,VT,alpha,beta,X,U,rho,coef_Sato,coef_Ana)
+function [Ti,Fext,Mext,m,axayaz] = modelo_DH(qbar,VT,alpha,beta,X,U,rho)
 %%Input vector
 
 %Variable declaration
@@ -36,7 +36,7 @@ Lbw = Lwb';
 VT0 = 12; %Reference speed [m/s]used to AVL's simulation
 S   = 0.27; %area da asa 
 m   = 2.2; %massa da aeronave kg
-c   = 0.226 ; %corda média aerodinamica
+c   = 0.226 ; %corda mï¿½dia aerodinamica
 b   = 1.2; %envergadura 
 g   = 9.80665;
 pi = 3.14159265;
@@ -50,8 +50,8 @@ AR = (b^2)/S;
     
   Iy = 0.11550;
   
-%%coeficientes aerodinâmicos
-coef_DH; %UTILIZAR O ARQUIVO COEF QUE REPRESENTA O MODELO AERODINÂMICO COMPLETO DA AERONAVE DH
+%%coeficientes aerodinï¿½micos
+coef_DH; %UTILIZAR O ARQUIVO COEF QUE REPRESENTA O MODELO AERODINï¿½MICO COMPLETO DA AERONAVE DH
 
 %Forces
  %%

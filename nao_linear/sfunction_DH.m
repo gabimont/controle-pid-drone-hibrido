@@ -1,48 +1,34 @@
-% Autor: SATO, F. C. Y. CURSINO
-% ITA - PG/EEC-D
-% MODELO MATEMÁTICO COMPLETO NÃO-LINEAR DH
-% PROGRAMA ADAPTADO DE NOTAS DE AULA AB-266 - PROF. ALMEIDA, F. A.
-% MODIFICADO EM: 21/04/2026
+% sfunction_DH.m
+% S-function (Level 1) que encapsula o modelo nao-linear completo do
+% Drone Hibrido. Estados, derivadas e saidas vem de dyn_rigidbody_DH
+% e obs_rigidbody_DH (utilitarios/).
+% =============================================================
 
-
-function [sys,x0,str,ts,simStateCompliance]=sfunction_DH(t,x,u,flag,Xe,coef_Sato,coef_Ana)
+function [sys,x0,str,ts,simStateCompliance] = sfunction_DH(t,x,u,flag,Xe)
 
 switch flag
 
-  %%%%%%%%%%%%%%%%%%
-  % Initialization %
-  %%%%%%%%%%%%%%%%%%
-  case 0         
+  %% Inicializacao
+  case 0
     [sys,x0,str,ts,simStateCompliance] = mdlInitializeSizes(Xe);
 
-  %%%%%%%%%%%%%%%
-  % Derivatives %
-  %%%%%%%%%%%%%%%
+  %% Derivadas
   case 1
-    sys = dyn_rigidbody_DH(t,x,u,coef_Sato,coef_Ana);
+    sys = dyn_rigidbody_DH(t,x,u);
 
-  %%%%%%%%%%%%%%%%%%%%%%%%
-  % Update and Terminate %
-  %%%%%%%%%%%%%%%%%%%%%%%%
+  %% Update / Terminate
   case {2,9}
-    sys = []; % do nothing
+    sys = [];
 
-  %%%%%%%%%%
-  % Output %
-  %%%%%%%%%%
+  %% Output
   case 3
-    sys = obs_rigidbody_DH(t,x,u,coef_Sato,coef_Ana); 
+    sys = obs_rigidbody_DH(t,x,u);
 
   otherwise
     DAStudio.error('Simulink:blocks:unhandledFlag', num2str(flag));
 end
 
-%
-%=============================================================================
-% mdlInitializeSizes
-% Return the sizes, initial conditions, and sample times for the S-function.
-%=============================================================================
-%
+
 function [sys,x0,str,ts,simStateCompliance] = mdlInitializeSizes(Xe)
 
 sizes = simsizes;
@@ -56,10 +42,5 @@ sizes.NumSampleTimes = 1;
 sys = simsizes(sizes);
 str = [];
 x0  = Xe;
-ts  = [0 0];   % sample time: [period, offset]
-
-% speicfy that the simState for this s-function is same as the default
+ts  = [0 0];
 simStateCompliance = 'DefaultSimState';
-
-
-

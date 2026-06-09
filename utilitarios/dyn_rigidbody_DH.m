@@ -1,13 +1,13 @@
 % Autor: SATO, F. C. Y. CURSINO
 % ITA - PG/EEC-D
-% MODELO MATEMÁTICO COMPLETO NÃO-LINEAR DH
+% MODELO MATEMï¿½TICO COMPLETO Nï¿½O-LINEAR DH
 % PROGRAMA ADAPTADO DE NOTAS DE AULA AB-266 - PROF. ALMEIDA, F. A.
 % MODIFICADO EM: 21/03/2026 
 
 
-function Xp = dyn_rigidbody_DH(t,X,U,coef_Sato,coef_Ana)
+function Xp = dyn_rigidbody_DH(t,X,U)
 
-%DECLARAÇÃO DE VARIAVEIS: ESTADOS, CONTROLES E PERTURBAÇÕES
+%DECLARAï¿½ï¿½O DE VARIAVEIS: ESTADOS, CONTROLES E PERTURBAï¿½ï¿½ES
 
 
 u     = X(1);
@@ -33,27 +33,27 @@ Lbn = [cos(theta)*cos(psi)                            cos(theta)*sin(psi)       
 
 Lnb = Lbn';
 
-%PERTURBAÇÕES DO VENTO
+%PERTURBAï¿½ï¿½ES DO VENTO
 
 U(5:7) = Lbn*U(5:7);
 wx = U(5);
 wy = U(6);
 wz = U(7);
 
-% DADOS ATMOSFÉRICOS, VELOCIDADE REAL E ÂNGULOS DE INCIDÊNCIA
+% DADOS ATMOSFï¿½RICOS, VELOCIDADE REAL E ï¿½NGULOS DE INCIDï¿½NCIA
 
-VT    = sqrt((u-wx)^2 + (v-wy)^2 + (w-wz)^2 ); %VELOCIDADE AERODINÂMICA REAL
-alpha = atan((w-wz)/(u-wx));% ÂNGULO DE ATAQUE
-beta  = asin((v-wy)/VT);% ÂNGULO DE DERRAPAGEM (SIDE SLIP ANGLE)
+VT    = sqrt((u-wx)^2 + (v-wy)^2 + (w-wz)^2 ); %VELOCIDADE AERODINï¿½MICA REAL
+alpha = atan((w-wz)/(u-wx));% ï¿½NGULO DE ATAQUE
+beta  = asin((v-wy)/VT);% ï¿½NGULO DE DERRAPAGEM (SIDE SLIP ANGLE)
 
-T    = 288.15*(1-6.5e-3*(-xD)/288.15);% TEMPERATURA EM FUNÇÃO DA ALTITUDE
-rho  = 1013.25e2*(1-6.5e-3*(-xD)/288.15)^(5.2561)/(287.3*T);% DENSIDADE DO AR EM FUNÇÃO DA ATITUDE
+T    = 288.15*(1-6.5e-3*(-xD)/288.15);% TEMPERATURA EM FUNï¿½ï¿½O DA ALTITUDE
+rho  = 1013.25e2*(1-6.5e-3*(-xD)/288.15)^(5.2561)/(287.3*T);% DENSIDADE DO AR EM FUNï¿½ï¿½O DA ATITUDE
 
-qbar = 0.5*rho*VT^2; % PRESSÃO DINÂMICA
+qbar = 0.5*rho*VT^2; % PRESSï¿½O DINï¿½MICA
 
-% CÁLCULO DE FORÇAS E MOMENTOS
+% Cï¿½LCULO DE FORï¿½AS E MOMENTOS
 
-[Ti,Fext,Mext,m] = modelo_DH(qbar,VT,alpha,beta,X,U,rho,coef_Sato,coef_Ana); 
+[Ti,Fext,Mext,m] = modelo_DH(qbar,VT,alpha,beta,X,U,rho);
 Fx  = Fext(1);
 Fy  = Fext(2);
 Fz  = Fext(3);
@@ -67,26 +67,26 @@ Ixz = -Ti(1,3);
 Rt  = 6378137; %METROS
 
 
-%EQUAÇÕES DE FORÇA
+%EQUAï¿½ï¿½ES DE FORï¿½A
 
 up = Fx/m - q*w + r*v;
 vp = Fy/m - r*u + p*w;
 wp = Fz/m - p*v + q*u;
 
-%EQUAÇÕES DO MOVIMENTO
+%EQUAï¿½ï¿½ES DO MOVIMENTO
 
 
   ppqprp = inv(Ti)*[(L + (Iyy-Izz)*q*r + Ixz*p*q)
                       (M + (Izz-Ixx)*p*r + Ixz*(r^2-p^2))
                       (N + (Ixx-Iyy)*p*q - Ixz*q*r)];
               
-%EQUAÇÕES DE CINEMÁTICA
+%EQUAï¿½ï¿½ES DE CINEMï¿½TICA
 
 phip   = p + q*sin(phi)*tan(theta) + r*cos(phi)*tan(theta);
 thetap = q*cos(phi) - r*sin(phi);
 psip   = q*sin(phi)/cos(theta) + r*cos(phi)/cos(theta);
 
-%EQUAÇÕES DE NAVEGAÇÃO
+%EQUAï¿½ï¿½ES DE NAVEGAï¿½ï¿½O
 
 xNpxEpxDp = Lnb*[u v w]';
 mip       = xNpxEpxDp(1)/Rt;
