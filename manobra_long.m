@@ -24,6 +24,8 @@ psi_ref_init   = 0;  psi_ref_final   = 0;  psi_ref_t   = 5;
 theta_step_init= 0;  theta_step_final= 0;  theta_step_t= 5;
 phi_step_init  = 0;  phi_step_final  = 0;  phi_step_t  = 5;
 h_step_init    = 0;  h_step_final    = 0;  h_step_t    = 20;
+phi_step_t2 = 1e9; phi_step_t3 = 1e9; psi_ref_t2 = 1e9; psi_ref_t3 = 1e9;
+h_step_t2   = 1e9; h_step_t3   = 1e9; theta_step_t2 = 1e9; theta_step_t3 = 1e9;
 att_alt   = 0;
 K_heading = Xe(1)/(9.80665*tau_psi);   % restaura (caso manobra anterior tenha zerado)
 

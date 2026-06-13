@@ -83,13 +83,20 @@ else
 end
 if exist('h_step_final','var')
     h_ref_sig = h_ref_sig + step_sig(t, h_step_init, h_step_final, h_step_t);
+    if exist('h_step_t2','var') && exist('h_step_t3','var')   % doublet
+        h_ref_sig = h_ref_sig + step_sig(t, 0, -2*h_step_final, h_step_t2) ...
+                              + step_sig(t, 0,    h_step_final, h_step_t3);
+    end
 end
 malha_h_aberta = exist('att_alt','var') && att_alt > 0.5;
 if malha_h_aberta, h_ref_sig = nan(size(t)); end
 
-% VT_ref constante
+% VT_ref constante + degrau opcional (Step_VT_ref)
 if exist('VT_ref','var')
     VT_ref_sig = VT_ref * ones(size(t));
+    if exist('VT_step_delta','var') && exist('VT_step_t','var')
+        VT_ref_sig = VT_ref_sig + step_sig(t, 0, VT_step_delta, VT_step_t);
+    end
 else
     VT_ref_sig = nan(size(t));
 end
@@ -103,9 +110,13 @@ else
     theta_ref_d = nan(size(t));  t_thref = t;
 end
 
-% psi_ref do step parametrico
+% psi_ref do step parametrico (+ doublet)
 if exist('psi_ref_final','var')
     psi_ref_sig = step_sig(t, psi_ref_init, psi_ref_final, psi_ref_t);
+    if exist('psi_ref_t2','var') && exist('psi_ref_t3','var')   % doublet
+        psi_ref_sig = psi_ref_sig + step_sig(t, 0, -2*psi_ref_final, psi_ref_t2) ...
+                                  + step_sig(t, 0,    psi_ref_final, psi_ref_t3);
+    end
 else
     psi_ref_sig = zeros(size(t));
 end
@@ -115,6 +126,10 @@ psi_ref_d = psi_ref_sig * R2D;
 phi_ref_sig = K_heading * (psi_ref_sig - Ys(:,10));
 if exist('phi_step_final','var')
     phi_ref_sig = phi_ref_sig + step_sig(t, phi_step_init, phi_step_final, phi_step_t);
+    if exist('phi_step_t2','var') && exist('phi_step_t3','var')   % doublet
+        phi_ref_sig = phi_ref_sig + step_sig(t, 0, -2*phi_step_final, phi_step_t2) ...
+                                  + step_sig(t, 0,    phi_step_final, phi_step_t3);
+    end
 end
 phi_ref_d = phi_ref_sig * R2D;
 
@@ -128,6 +143,9 @@ if exist('h_step_final','var') && abs(h_step_final-h_step_init) > 1e-6
 end
 if exist('VT_ref','var') && exist('Ve','var') && abs(VT_ref-Ve) > 1e-6
     ex{end+1} = sprintf('VT%+dms', round(VT_ref-Ve));
+end
+if exist('VT_step_delta','var') && abs(VT_step_delta) > 1e-6
+    ex{end+1} = sprintf('VTstep%+gms@%gs', VT_step_delta, VT_step_t);
 end
 if exist('psi_ref_final','var') && abs(psi_ref_final-psi_ref_init) > 1e-6
     ex{end+1} = sprintf('psi%+ddeg@%gs', round((psi_ref_final-psi_ref_init)*R2D), psi_ref_t);
