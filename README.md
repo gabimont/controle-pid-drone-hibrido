@@ -2,8 +2,6 @@
 
 Modelo da planta + piloto automático em **PID cascata** para o drone híbrido (DH) voando em modo asa-fixa.
 
-> **Comparação com LQR:** os scripts que comparam este controle com o LQR do colega ficam em `../Comparar LQR e PID/`.
-
 ---
 
 ## Início rápido
@@ -146,13 +144,6 @@ plot_NL_DH
 | **Bank direto** (malha de rolamento isolada) | `K_heading=0` + `phi_step_*` | `K_heading=0.1975`, steps `0` |
 
 > Cada canal tem ainda 2 steps extras (`*_t2`/`*_t3`, default `1e9` = inertes) que transformam o degrau em **doublet** (0 → +A → −A → 0), igual ao harness do LQRY.
-
-### 4. Comparar com o LQR
-
-```matlab
-cd ../"Comparar LQR e PID"
-refaz_missao_caso4        % missão (Caso 4): PID (servo) sobreposto ao LQR, layout 6×2
-```
 
 ---
 
