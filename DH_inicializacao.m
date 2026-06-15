@@ -17,6 +17,8 @@ addpath(fullfile(rootDir, 'utilitarios'));
 addpath(fullfile(rootDir, 'linear', 'utilitarios'));
 addpath(fullfile(rootDir, 'linear'));
 addpath(fullfile(rootDir, 'nao_linear'));
+addpath(rootDir);                         % raiz: plot_NL_DH
+addpath(fullfile(rootDir, 'manobras'));   % manobras: manobra_*, missao_perfil
 
 %% Carrega matrizes lineares
 matrizes_file = fullfile(rootDir, 'linear', 'MATRIZES_DH.m');
@@ -165,8 +167,10 @@ h_step_t2     = 1e9;  h_step_t3     = 1e9;
 theta_step_t2 = 1e9;  theta_step_t3 = 1e9;
 
 %% ===================== Pronto =====================
-fprintf('Workspace configurado. Pode abrir/simular:\n');
-fprintf('  - linear/utilitarios/modelo_linear_DH_CL.slx       (closed-loop linear)\n');
-fprintf('  - nao_linear/modelo_NL_DH_CL.slx                   (closed-loop nao-linear)\n');
-fprintf('  - linear/utilitarios/Comparation_L_and_NL_Long.slx (validacao L vs NL)\n');
-fprintf('  - linear/utilitarios/Comparation_L_and_NL_Lat.slx  (validacao L vs NL)\n');
+fprintf('\n=== Workspace pronto. Fluxo de uso (modelo nao-linear) ===\n');
+fprintf('  1) DH_inicializacao                                   <- feito\n');
+fprintf('  2) escolha uma manobra:  manobra_long | manobra_latero | manobra_agressiva\n');
+fprintf('  3) out = sim(''modelo_NL_DH_CL'');                      (ou Play no Simulink)\n');
+fprintf('  4) plot_NL_DH                                         (gera as figuras)\n');
+fprintf('  >> missao_perfil executa 2-4 sozinho (perfil completo de missao).\n');
+fprintf('\nModelos:  nao_linear/modelo_NL_DH_CL.slx   .   linear/modelo_linear_DH_CL.slx\n');

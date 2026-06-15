@@ -3,7 +3,9 @@
 %   Aceleracao        t=5s        VT: 12.0 -> 15.2 m/s (degrau)
 %   Correcao de proa  t=50/100/150s  psi: 0 -> +5 -> -5 -> 0 (doublet)
 %   Mudanca de altitude t=80/160/240s  h: 600 -> 605 -> 595 -> 600 m (doublet)
-run(fullfile(fileparts(mfilename('fullpath')),'DH_inicializacao.m'));
+raiz = fileparts(fileparts(mfilename('fullpath')));  % raiz do repo (pasta acima de manobras/)
+addpath(raiz);                                        % garante DH_inicializacao e plot_NL_DH no path
+run(fullfile(raiz,'DH_inicializacao.m'));
 
 % --- Aceleracao: degrau de VT em t=5s ---
 VT_ref        = Ve;            % base 12 m/s
